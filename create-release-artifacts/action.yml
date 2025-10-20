@@ -1,0 +1,53 @@
+name: Create release artifacts
+description: Create release artifacts, e.g. binary packages, and upload them to a GitHub Release.
+
+inputs:
+  binary:
+    description: Name of the binary to upload.
+    required: true
+  target:
+    description: Target triple, e.g. aarch64-apple-darwin
+    required: true
+  token:
+    description: GitHub token for creating GitHub Releases.
+    required: true
+
+env:
+  CARGO_INCREMENTAL: 0
+  CARGO_NET_GIT_FETCH_WITH_CLI: true
+  CARGO_NET_RETRY: 10
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
+  RUSTFLAGS: -D warnings
+  RUSTUP_MAX_RETRIES: 10
+
+defaults:
+  run:
+    shell: bash --noprofile --norc -CeEuxo pipefail {0}
+
+runs:
+  using: "composite"
+  steps:
+    - uses: taiki-e/checkout-action@v1
+    - name: Install Rust
+      run: rustup update stable --no-self-update
+    - uses: taiki-e/setup-cross-toolchain-action@v1
+      with:
+        target: ${{ inputs.target }}
+        runner: none
+    - run: printf '%s\n' "RUSTFLAGS=${RUSTFLAGS} -C target-feature=+crt-static" >>"${GITHUB_ENV}"
+      if: contains(inputs.target, '-windows-msvc')
+    - run: printf '%s\n' "RUSTFLAGS=${RUSTFLAGS} -C target-feature=+crt-static -C link-self-contained=yes" >>"${GITHUB_ENV}"
+      if: contains(inputs.target, '-linux-musl')
+    # https://doc.rust-lang.org/rustc/platform-support.html
+    - run: printf 'MACOSX_DEPLOYMENT_TARGET=10.12\n' >>"${GITHUB_ENV}"
+      if: inputs.target == 'x86_64-apple-darwin'
+    - run: printf 'MACOSX_DEPLOYMENT_TARGET=11.0\n' >>"${GITHUB_ENV}"
+      if: inputs.target == 'aarch64-apple-darwin' || inputs.target == 'universal-apple-darwin'
+    - uses: taiki-e/upload-rust-binary-action@v1
+      with:
+        bin: ${{ inputs.binary }}
+        target: ${{ inputs.target }}
+        tar: all
+        zip: windows
+        token: ${{ inputs.token }}
