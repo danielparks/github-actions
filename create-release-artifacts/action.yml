@@ -12,15 +12,6 @@ inputs:
     description: GitHub token for creating GitHub Releases.
     required: true
 
-env:
-  CARGO_INCREMENTAL: 0
-  CARGO_NET_GIT_FETCH_WITH_CLI: true
-  CARGO_NET_RETRY: 10
-  CARGO_TERM_COLOR: always
-  RUST_BACKTRACE: 1
-  RUSTFLAGS: -D warnings
-  RUSTUP_MAX_RETRIES: 10
-
 runs:
   using: "composite"
   steps:
