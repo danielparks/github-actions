@@ -18,5 +18,4 @@ runs:
       with:
         changelog: CHANGELOG.md
         title: Release $version
-        branch: main
         token: ${{ inputs.token }}
