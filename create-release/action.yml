@@ -18,9 +18,11 @@ env:
 runs:
   using: "composite"
   steps:
-    - uses: taiki-e/checkout-action@v1
+    - run: echo $RUSTFLAGS
+      shell: bash --noprofile --norc -CeEuxo pipefail {0}
     - run: echo $TEST_ENV_FOO
       shell: bash --noprofile --norc -CeEuxo pipefail {0}
+    - uses: taiki-e/checkout-action@v1
     - name: Install Rust
       run: rustup update stable --no-self-update
       shell: bash --noprofile --norc -CeEuxo pipefail {0}
