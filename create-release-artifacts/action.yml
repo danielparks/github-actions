@@ -18,23 +18,23 @@ runs:
     - uses: taiki-e/checkout-action@v1
     - name: Install Rust
       run: rustup update stable --no-self-update
-      shell: bash --noprofile --norc -CeEuxo pipefail {0}
+      shell: bash
     - uses: taiki-e/setup-cross-toolchain-action@v1
       with:
         target: ${{ inputs.target }}
         runner: none
     - run: printf '%s\n' "RUSTFLAGS=${RUSTFLAGS} -C target-feature=+crt-static" >>"${GITHUB_ENV}"
-      shell: bash --noprofile --norc -CeEuxo pipefail {0}
+      shell: bash
       if: contains(inputs.target, '-windows-msvc')
     - run: printf '%s\n' "RUSTFLAGS=${RUSTFLAGS} -C target-feature=+crt-static -C link-self-contained=yes" >>"${GITHUB_ENV}"
-      shell: bash --noprofile --norc -CeEuxo pipefail {0}
+      shell: bash
       if: contains(inputs.target, '-linux-musl')
     # https://doc.rust-lang.org/rustc/platform-support.html
     - run: printf 'MACOSX_DEPLOYMENT_TARGET=10.12\n' >>"${GITHUB_ENV}"
-      shell: bash --noprofile --norc -CeEuxo pipefail {0}
+      shell: bash
       if: inputs.target == 'x86_64-apple-darwin'
     - run: printf 'MACOSX_DEPLOYMENT_TARGET=11.0\n' >>"${GITHUB_ENV}"
-      shell: bash --noprofile --norc -CeEuxo pipefail {0}
+      shell: bash
       if: inputs.target == 'aarch64-apple-darwin' || inputs.target == 'universal-apple-darwin'
     - uses: taiki-e/upload-rust-binary-action@v1
       with:
