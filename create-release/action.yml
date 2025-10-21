@@ -6,7 +6,7 @@ inputs:
     required: true
 
 runs:
-  using: "composite"
+  using: composite
   steps:
     - uses: taiki-e/checkout-action@v1
     - name: Install Rust
