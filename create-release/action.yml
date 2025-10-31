@@ -4,6 +4,11 @@ inputs:
   token:
     description: GitHub token for creating GitHub Releases.
     required: true
+  package-options:
+    description: Extra options to pass to `cargo package`.
+    required: false
+    type: string
+    default:
 
 runs:
   using: composite
@@ -12,7 +17,7 @@ runs:
     - name: Install Rust
       run: rustup update stable --no-self-update
       shell: bash
-    - run: cargo package
+    - run: cargo package ${{ inputs.package-options }}
       shell: bash
     - uses: taiki-e/create-gh-release-action@v1
       with:
