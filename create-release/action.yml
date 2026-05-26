@@ -17,8 +17,10 @@ runs:
     - name: Install Rust
       run: rustup update stable --no-self-update
       shell: bash
-    - run: cargo package ${{ inputs.package-options }}
+    - run: cargo package ${INPUTS_PACKAGE_OPTIONS}
       shell: bash
+      env:
+        INPUTS_PACKAGE_OPTIONS: ${{ inputs.package-options }}
     - uses: taiki-e/create-gh-release-action@eba8ea96c86cca8a37f1b56e94b4d13301fba651 # v1.11.0
       with:
         changelog: CHANGELOG.md
