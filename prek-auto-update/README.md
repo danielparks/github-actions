@@ -1,0 +1,26 @@
+# Run `prek auto-update` and generate a PR for changes
+
+```yaml
+name: prek auto-update
+
+on:
+  schedule:
+    - cron: "0 12 * * 5" # Every Friday at 12:00 UTC (5am PDT / 4am PST).
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  prek-auto-update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write # Change files
+      pull-requests: write # Create and update PRs
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          # zizmor: ignore[artipacked] no archive; needed for git
+          persist-credentials: true
+      - uses: danielparks/github-actions/prek-auto-update@v1.1.0
+```

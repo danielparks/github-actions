@@ -1,0 +1,42 @@
+name: Auto-update prek
+description: >
+  Auto-update the pre-commit hooks. Needs `write` permissions for `contents` and
+  `pull-requests`, and needs `persist-credentials: true` on `actions/checkout`.
+
+inputs:
+  branch:
+    description: Branch name.
+    default: prek-auto-update
+  commit-message:
+    description: Commit message.
+    default: "`prek auto-update`."
+
+runs:
+  using: composite
+  steps:
+    - uses: taiki-e/install-action@59012be0884e296ca2da49b530610e72c49039ad # v2.81.6
+      with:
+        tool: prek
+    - run: prek auto-update
+    - name: Open PR if changed
+      env:
+        BRANCH: ${{ inputs.branch }}
+        COMMIT_MESSAGE: ${{ inputs.commit-message }}
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        if [[ -z $(git status --porcelain) ]]; then
+          exit 0
+        fi
+
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git checkout -b "$BRANCH"
+        git add -A
+        git commit -m "$COMMIT_MESSAGE"
+        git push -u origin "$BRANCH" --force
+
+        if ! gh pr list --head "$BRANCH" --state open --json number --jq '.[0]' | grep -q .; then
+          gh pr create \
+            --title '`prek auto-update`' \
+            --body 'Automated weekly update from `prek auto-update`.'
+        fi
