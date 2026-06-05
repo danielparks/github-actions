@@ -22,5 +22,5 @@ jobs:
         with:
           # zizmor: ignore[artipacked] no archive; needed for git
           persist-credentials: true
-      - uses: danielparks/github-actions/prek-auto-update@v1.1.0
+      - uses: danielparks/github-actions/prek-auto-update@066bc679390bd9adf0780e681993bdd28cf4d8e2 # v1.1.0
 ```
