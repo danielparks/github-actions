@@ -10,6 +10,13 @@ inputs:
   commit-message:
     description: Commit message.
     default: "`prek auto-update`."
+  token:
+    description: >
+      GitHub token for creating pull requests. You must either enable
+      “Allow GitHub Actions to create and approve pull requests” (In your repo
+      under Settings → Actions → General) or you must supply a token with write
+      access to contents and pull requests.
+    default: ${{ github.token }}
 
 runs:
   using: composite
@@ -23,7 +30,7 @@ runs:
       env:
         BRANCH: ${{ inputs.branch }}
         COMMIT_MESSAGE: ${{ inputs.commit-message }}
-        GH_TOKEN: ${{ github.token }}
+        GH_TOKEN: ${{ inputs.token }}
       run: |
         if [[ -z $(git status --porcelain) ]]; then
           exit 0

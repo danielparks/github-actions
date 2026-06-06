@@ -24,3 +24,13 @@ jobs:
           persist-credentials: true
       - uses: danielparks/github-actions/prek-auto-update@066bc679390bd9adf0780e681993bdd28cf4d8e2 # v1.1.0
 ```
+
+You must either:
+
+- Enable “Allow GitHub Actions to create and approve pull requests” (In your repo under Settings → Actions → General).
+- Supply a token with **write** access to **contents** and **pull requests**.
+
+You can enable “Allow GitHub Actions to create and approve pull requests” via the command line with:
+
+    gh api --method PUT '/repos/{owner}/{repo}/actions/permissions/workflow' \
+      --field can_approve_pull_request_reviews=true
