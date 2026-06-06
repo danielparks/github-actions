@@ -18,6 +18,7 @@ runs:
       with:
         tool: prek
     - run: prek auto-update
+      shell: bash
     - name: Open PR if changed
       env:
         BRANCH: ${{ inputs.branch }}
@@ -40,3 +41,4 @@ runs:
             --title '`prek auto-update`' \
             --body 'Automated weekly update from `prek auto-update`.'
         fi
+      shell: bash
