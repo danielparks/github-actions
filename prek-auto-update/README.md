@@ -23,14 +23,16 @@ jobs:
           # zizmor: ignore[artipacked] no archive; needed for git
           persist-credentials: true
       - uses: danielparks/github-actions/prek-auto-update@2f6c98c73f0a8130d737500b59a0fddf749b484d # v1.1.1
+        with:
+          token: ${{ secrets.AUTO_UPDATE_TOKEN }}
 ```
 
 You must either:
 
-- Enable “Allow GitHub Actions to create and approve pull requests” (In your repo under Settings → Actions → General).
-- Supply a token with **write** access to **contents** and **pull requests**.
+- Supply a token with **write** access to **contents** and **pull requests**. PRs created this way will run PR checks normally.
+- Enable “Allow GitHub Actions to create and approve pull requests” (In your repo under Settings → Actions → General). However, PRs created this way will not run PR checks.
 
-You can enable “Allow GitHub Actions to create and approve pull requests” via the command line with:
+  You can enable “Allow GitHub Actions to create and approve pull requests” via the command line with:
 
-    gh api --method PUT '/repos/{owner}/{repo}/actions/permissions/workflow' \
-      --field can_approve_pull_request_reviews=true
+      gh api --method PUT '/repos/{owner}/{repo}/actions/permissions/workflow' \
+        --field can_approve_pull_request_reviews=true
