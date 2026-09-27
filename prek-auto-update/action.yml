@@ -21,7 +21,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: taiki-e/install-action@56545b37b57562edd73171cb6c62cc509db4c34e # v2.81.7
+    - uses: taiki-e/install-action@37f7c5781271959fb65b6b35224e28652ff2b63d # v2.87.0
       with:
         tool: prek
     - run: prek auto-update
