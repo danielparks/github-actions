@@ -23,8 +23,9 @@ runs:
   steps:
     - uses: taiki-e/install-action@37f7c5781271959fb65b6b35224e28652ff2b63d # v2.87.0
       with:
-        tool: prek
-    - run: prek auto-update
+        # TODO: revert to latest after taiki-e/install-action updates
+        tool: prek@0.5.
+    - run: prek update
       shell: bash
     - name: Open PR if changed
       env:
